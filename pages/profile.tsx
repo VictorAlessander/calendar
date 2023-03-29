@@ -1,9 +1,20 @@
 import Meta from "@partials/meta";
-import { Divider, Button, Form, Input } from "antd";
+import { Divider, Button, Form, Input, notification } from "antd";
 
 export default function Profile() {
   const [formOne] = Form.useForm();
   const [formTwo] = Form.useForm();
+
+  const openNotification = () => {
+    notification.success({
+      message: "Notification Title",
+      description:
+        "This is the content of the notification. This is the content of the notification. This is the content of the notification.",
+      onClick: () => {
+        console.log("Notification Clicked!");
+      },
+    });
+  };
 
   return (
     <>
@@ -23,7 +34,9 @@ export default function Profile() {
             <Input type="text" placeholder="Enter a name" value="any name" />
           </Form.Item>
           <Form.Item>
-            <Button type="primary">Submit</Button>
+            <Button type="primary" onClick={openNotification}>
+              Submit
+            </Button>
           </Form.Item>
         </Form>
 
@@ -37,7 +50,9 @@ export default function Profile() {
             <Input type="password" placeholder="New Password" />
           </Form.Item>
           <Form.Item>
-            <Button type="primary">Submit</Button>
+            <Button type="primary" onClick={openNotification}>
+              Submit
+            </Button>
           </Form.Item>
         </Form>
       </main>
