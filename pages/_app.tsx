@@ -9,11 +9,14 @@ import {
   LoginOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 const { Header, Content, Footer, Sider } = Layout;
 
 export default function App({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
+  const router = useRouter();
 
   const {
     token: { colorBgContainer },
@@ -21,16 +24,22 @@ export default function App({ Component, pageProps }: AppProps) {
 
   const siderItems = [
     {
-      key: "1",
+      key: "calendar",
       icon: <CalendarOutlined />,
-      label: "Calendar",
+      label: <Link href="/">Calendar</Link>,
     },
     {
-      key: "2",
+      key: "profile",
       icon: <UserOutlined />,
-      label: "Profile",
+      label: <Link href="/profile">Profile</Link>,
     },
   ];
+
+  const setSiderSelectedMenu = () => {
+    const pathname = router.pathname;
+
+    return pathname.length > 5 ? pathname.slice(1) : "calendar";
+  };
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -51,6 +60,7 @@ export default function App({ Component, pageProps }: AppProps) {
             mode="inline"
             defaultSelectedKeys={["1"]}
             items={siderItems}
+            selectedKeys={[setSiderSelectedMenu()]}
           />
         </Sider>
         <Layout>
