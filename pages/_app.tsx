@@ -3,81 +3,25 @@ import type { AppProps } from "next/app";
 import { useState } from "react";
 import { QueryClientProvider, QueryClient } from "react-query";
 import React from "react";
-import {
-  UserOutlined,
-  CalendarOutlined,
-  LoginOutlined,
-} from "@ant-design/icons";
-import { Button, Layout, Menu, theme } from "antd";
-import Link from "next/link";
-import { useRouter } from "next/router";
+import { Layout, theme } from "antd";
+import Sider from "@components/UI/Sider/Sider";
+import Header from "@components/UI/Header/Header";
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Content, Footer } = Layout;
 
 export default function App({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
-  const router = useRouter();
 
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  const siderItems = [
-    {
-      key: "calendar",
-      icon: <CalendarOutlined />,
-      label: <Link href="/">Calendar</Link>,
-    },
-    {
-      key: "profile",
-      icon: <UserOutlined />,
-      label: <Link href="/profile">Profile</Link>,
-    },
-  ];
-
-  const setSiderSelectedMenu = () => {
-    const pathname = router.pathname;
-
-    return pathname.length > 5 ? pathname.slice(1) : "calendar";
-  };
-
   return (
     <QueryClientProvider client={queryClient}>
       <Layout>
-        <Sider
-          breakpoint="lg"
-          collapsedWidth="0"
-          onBreakpoint={(broken) => {
-            console.log(broken);
-          }}
-          onCollapse={(collapsed, type) => {
-            console.log(collapsed, type);
-          }}
-        >
-          <div className="logo" />
-          <Menu
-            theme="dark"
-            mode="inline"
-            defaultSelectedKeys={["1"]}
-            items={siderItems}
-            selectedKeys={[setSiderSelectedMenu()]}
-          />
-        </Sider>
+        <Sider />
         <Layout>
-          <Header
-            style={{
-              padding: 0,
-              background: colorBgContainer,
-              display: "flex",
-              justifyContent: "flex-end",
-            }}
-          >
-            <span>
-              <Button type="link" icon={<LoginOutlined />}>
-                Login
-              </Button>
-            </span>
-          </Header>
+          <Header />
           <Content style={{ margin: "24px 16px 0" }}>
             <div
               style={{
