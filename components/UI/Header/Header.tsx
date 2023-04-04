@@ -1,4 +1,4 @@
-import { LoginOutlined } from "@ant-design/icons";
+import { LogoutOutlined } from "@ant-design/icons";
 import { Layout, Button, theme } from "antd";
 
 const { Header: AntdHeader } = Layout;
@@ -18,8 +18,8 @@ const Header = () => {
       }}
     >
       <span>
-        <Button type="link" icon={<LoginOutlined />}>
-          Login
+        <Button type="link" icon={<LogoutOutlined />}>
+          Logout
         </Button>
       </span>
     </AntdHeader>

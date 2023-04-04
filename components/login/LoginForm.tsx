@@ -2,7 +2,7 @@ import React from "react";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input } from "antd";
 
-const LoginForm: React.FC = () => {
+const LoginForm: React.FC = (props: any) => {
   const onFinish = (values: any) => {
     console.log("Received values of form: ", values);
   };

@@ -3,41 +3,43 @@ import type { AppProps } from "next/app";
 import { useState } from "react";
 import { QueryClientProvider, QueryClient } from "react-query";
 import React from "react";
-import { Layout, theme } from "antd";
+import { Layout } from "antd";
 import Sider from "@components/UI/Sider/Sider";
 import Header from "@components/UI/Header/Header";
+import Footer from "@components/UI/Footer/Footer";
+import Body from "@components/UI/Body/Body";
+import { useRouter } from "next/router";
 
-const { Content, Footer } = Layout;
+interface ILayoutProps {
+  children: React.ReactNode;
+}
+
+function WithLayout({ children }: ILayoutProps) {
+  return (
+    <Layout>
+      <Sider />
+      <Layout>
+        <Header />
+        <Body>{children}</Body>
+        <Footer />
+      </Layout>
+    </Layout>
+  );
+}
 
 export default function App({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
-
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
+  const router = useRouter();
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Layout>
-        <Sider />
-        <Layout>
-          <Header />
-          <Content style={{ margin: "24px 16px 0" }}>
-            <div
-              style={{
-                padding: 24,
-                minHeight: 360,
-                background: colorBgContainer,
-              }}
-            >
-              <Component {...pageProps} />
-            </div>
-          </Content>
-          <Footer style={{ textAlign: "center" }}>
-            Ant Design ©2023 Created by Ant UED
-          </Footer>
-        </Layout>
-      </Layout>
+      {router.pathname != "/login" ? (
+        <WithLayout>
+          <Component {...pageProps} />
+        </WithLayout>
+      ) : (
+        <Component {...pageProps} />
+      )}
     </QueryClientProvider>
   );
 }
