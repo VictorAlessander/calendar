@@ -1,15 +1,12 @@
-import { isAuthenticated } from "@authentication/api/auth";
 import LoginForm from "@components/login/LoginForm";
 import Meta from "@partials/meta";
 import { GetServerSideProps } from "next";
-import { QueryClient } from "react-query";
+import { QueryClient, useQuery } from "react-query";
+import { validateAuth } from "@api/authentication/validate";
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const queryClient = new QueryClient();
-  const query = await queryClient.fetchQuery(
-    "isAuthenticated",
-    isAuthenticated
-  );
+  const query = await queryClient.fetchQuery("isAuthenticated", validateAuth);
 
   if (query.authenticated)
     return {
@@ -19,7 +16,7 @@ export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
       },
     };
 
-  return { props: { authenticated: query.authenticated } };
+  return { props: {} };
 };
 
 export default function Login(props: any) {

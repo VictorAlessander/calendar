@@ -1,0 +1,36 @@
+version: "3.9"
+services:
+  db:
+    image: postgres:latest
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - calendar_network
+    ports:
+      - "5432:5432"
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_PASSWORD=hidemyip
+      - POSTGRES_DB=calendar_dev
+
+  frontend:
+    image: node:latest
+    ports:
+      - "3000:3000"
+    expose:
+      - 3000
+    depends_on:
+      - db
+    networks:
+      - calendar_network
+    command: sh -c "yarn install && yarn dev"
+    volumes:
+      - .:/calendar
+    working_dir: /calendar
+
+networks:
+  calendar_network:
+
+volumes:
+  db_data:

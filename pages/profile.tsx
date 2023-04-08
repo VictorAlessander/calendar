@@ -1,4 +1,4 @@
-import { isAuthenticated } from "@authentication/api/auth";
+import { validateAuth } from "@api/authentication/validate";
 import Meta from "@partials/meta";
 import { Divider, Button, Form, Input, notification } from "antd";
 import { GetServerSideProps } from "next";
@@ -6,10 +6,7 @@ import { QueryClient } from "react-query";
 
 export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
   const queryClient = new QueryClient();
-  const query = await queryClient.fetchQuery(
-    "isAuthenticated",
-    isAuthenticated
-  );
+  const query = await queryClient.fetchQuery("isAuthenticated", validateAuth);
 
   if (!query.authenticated)
     return {
