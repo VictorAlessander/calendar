@@ -1,44 +1,40 @@
 import "@styles/globals.css";
 import type { AppProps } from "next/app";
-import { useState } from "react";
+import { useState, createContext } from "react";
 import { QueryClientProvider, QueryClient } from "react-query";
 import React from "react";
-import { Layout } from "antd";
-import Sider from "@components/UI/Sider/Sider";
-import Header from "@components/UI/Header/Header";
-import Footer from "@components/UI/Footer/Footer";
-import Body from "@components/UI/Body/Body";
 import { useRouter } from "next/router";
+import { DefaultLayout } from "@components/UI";
 
-interface ILayoutProps {
-  children: React.ReactNode;
-}
+const DEFAULT_AUTH_CONTEXT_VALUES = {
+  authenticated: false,
+  token: null,
+};
 
-function WithLayout({ children }: ILayoutProps) {
-  return (
-    <Layout>
-      <Sider />
-      <Layout>
-        <Header />
-        <Body>{children}</Body>
-        <Footer />
-      </Layout>
-    </Layout>
-  );
-}
+export const AuthContext = createContext(DEFAULT_AUTH_CONTEXT_VALUES);
 
 export default function App({ Component, pageProps }: AppProps) {
   const [queryClient] = useState(() => new QueryClient());
   const router = useRouter();
 
+  const withLayout = () => {
+    return (
+      <AuthContext.Provider value={DEFAULT_AUTH_CONTEXT_VALUES}>
+        <DefaultLayout>
+          <Component {...pageProps} />
+        </DefaultLayout>
+      </AuthContext.Provider>
+    );
+  };
+
   return (
     <QueryClientProvider client={queryClient}>
       {router.pathname != "/login" ? (
-        <WithLayout>
-          <Component {...pageProps} />
-        </WithLayout>
+        withLayout()
       ) : (
-        <Component {...pageProps} />
+        <AuthContext.Provider value={DEFAULT_AUTH_CONTEXT_VALUES}>
+          <Component {...pageProps} />
+        </AuthContext.Provider>
       )}
     </QueryClientProvider>
   );

@@ -1,8 +1,12 @@
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@db/globalPrisma";
 
 interface ILoginProps {
-  username: string;
+  email: string;
   password: string;
 }
 
-export default function login({ username, password }: ILoginProps) {}
+export default async function login({ email, password }: ILoginProps) {
+  return await prisma.user.findFirst({
+    where: { email: email, password: password },
+  });
+}

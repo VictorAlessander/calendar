@@ -1,25 +1,27 @@
-import { validateAuth } from "@api/authentication/validate";
+// import { validateAuth } from "@api/authentication/validate";
+import useCheckAuth from "@helpers/useCheckAuth";
 import Meta from "@partials/meta";
 import { Divider, Button, Form, Input, notification } from "antd";
-import { GetServerSideProps } from "next";
-import { QueryClient } from "react-query";
+// import { GetServerSideProps } from "next";
+// import { QueryClient } from "react-query";
 
-export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
-  const queryClient = new QueryClient();
-  const query = await queryClient.fetchQuery("isAuthenticated", validateAuth);
+// export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
+//   const queryClient = new QueryClient();
+//   const query = await queryClient.fetchQuery("isAuthenticated", validateAuth);
 
-  if (!query.authenticated)
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
+//   if (!query.authenticated)
+//     return {
+//       redirect: {
+//         destination: "/login",
+//         permanent: false,
+//       },
+//     };
 
-  return { props: {} };
-};
+//   return { props: {} };
+// };
 
 export default function Profile() {
+  useCheckAuth();
   const [formOne] = Form.useForm();
   const [formTwo] = Form.useForm();
 

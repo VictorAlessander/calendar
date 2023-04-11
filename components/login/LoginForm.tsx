@@ -1,10 +1,30 @@
-import React from "react";
+import React, { useContext } from "react";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input } from "antd";
+import { AuthContext } from "@pages/_app";
 
 const LoginForm: React.FC = (props: any) => {
+  const authConsumer = useContext(AuthContext);
+
   const onFinish = (values: any) => {
-    console.log("Received values of form: ", values);
+    fetch("/api/auth/login", {
+      method: "POST",
+      body: JSON.stringify({
+        email: values.username,
+        password: values.password,
+      }),
+    }).then((res) => {
+      try {
+        if (res.status == 200) authConsumer.authenticated = true;
+        res.json().then((data) => {
+          authConsumer.token = data.token;
+        });
+      } catch (err) {
+        if (err instanceof Error) {
+          console.error(err);
+        }
+      }
+    });
   };
 
   return (
