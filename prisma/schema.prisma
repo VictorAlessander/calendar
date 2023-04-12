@@ -6,29 +6,29 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
   email    String @unique
   password String
 }
 
 model Customer {
-  id            Int         @id @default(autoincrement())
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
   email         String      @unique
   name          String
   phone         String
   appointment   Appointment @relation(fields: [appointmentId], references: [id])
-  appointmentId Int         @unique
+  appointmentId String      @unique @db.ObjectId
 }
 
 model Appointment {
-  id          Int               @id @default(autoincrement())
-  title       String            @db.VarChar(80)
-  description String            @db.VarChar(120)
+  id          String            @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
   date        DateTime
   createdAt   DateTime          @default(now())
   updatedAt   DateTime          @updatedAt
@@ -38,8 +38,8 @@ model Appointment {
 }
 
 model AppointmentFile {
-  id            Int         @id @default(autoincrement())
-  fileName      String      @db.VarChar(30)
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  fileName      String
   appointment   Appointment @relation(fields: [appointmentId], references: [id])
-  appointmentId Int         @unique
+  appointmentId String      @unique @db.ObjectId
 }
