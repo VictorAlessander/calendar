@@ -1,10 +1,30 @@
 import Calendar from "@components/Calendar/Calendar";
-import useCheckAuth from "@helpers/useCheckAuth";
 import Meta from "@partials/meta";
+import { GetServerSideProps } from "next";
+import { Session } from "next-auth";
+import { getSession } from "next-auth/react";
 
-export default function Home() {
-  useCheckAuth();
+interface IHomeServerSideProps {
+  session: Session | null;
+}
 
+export const getServerSideProps: GetServerSideProps<
+  IHomeServerSideProps
+> = async (context) => {
+  const session = await getSession(context);
+
+  if (!session)
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+
+  return { props: { session } };
+};
+
+export default function Home({ session, ...props }: IHomeServerSideProps) {
   return (
     <>
       <Meta />

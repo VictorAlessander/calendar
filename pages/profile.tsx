@@ -1,27 +1,34 @@
-// import { validateAuth } from "@api/authentication/validate";
-import useCheckAuth from "@helpers/useCheckAuth";
 import Meta from "@partials/meta";
 import { Divider, Button, Form, Input, notification } from "antd";
-// import { GetServerSideProps } from "next";
-// import { QueryClient } from "react-query";
+import { GetServerSideProps } from "next";
+import { Session } from "next-auth";
+import { getSession } from "next-auth/react";
 
-// export const getServerSideProps: GetServerSideProps<{}> = async (context) => {
-//   const queryClient = new QueryClient();
-//   const query = await queryClient.fetchQuery("isAuthenticated", validateAuth);
+interface IProfileServerSideProps {
+  session: Session | null;
+}
 
-//   if (!query.authenticated)
-//     return {
-//       redirect: {
-//         destination: "/login",
-//         permanent: false,
-//       },
-//     };
+export const getServerSideProps: GetServerSideProps<
+  IProfileServerSideProps
+> = async (context) => {
+  const session = await getSession(context);
 
-//   return { props: {} };
-// };
+  if (!session)
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
 
-export default function Profile() {
-  useCheckAuth();
+  return { props: { session } };
+};
+
+export default function Profile({
+  session,
+  ...props
+}: IProfileServerSideProps) {
+  // useCheckAuth();
   const [formOne] = Form.useForm();
   const [formTwo] = Form.useForm();
 

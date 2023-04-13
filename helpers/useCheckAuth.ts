@@ -1,15 +1,15 @@
-import { AuthContext } from "@pages/_app";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useContext, useEffect } from "react";
+import { useEffect } from "react";
 
 export default function useCheckAuth() {
-  const authConsumer = useContext(AuthContext);
   const router = useRouter();
+  const { status } = useSession();
 
   useEffect(() => {
-    if (authConsumer.authenticated && router.pathname == "/login")
+    if (status === "authenticated" && router.pathname == "/login")
       router.push("/");
-    else if (!authConsumer.authenticated && router.pathname !== "/login")
+    else if (status === "unauthenticated" && router.pathname !== "/login")
       router.push("/login");
-  }, [authConsumer.authenticated, router]);
+  }, [status, router]);
 }
